@@ -39,21 +39,24 @@ class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<int> timerSubscription;
   String minutesStr = '00';
   String secondsStr = '00';
+  int counter = 0;
+  var _isStopActive = false;
 
   Stream<int> stopWatchStream() {
     StreamController<int> streamController;
     Timer timer;
     Duration timerInterval = Duration(seconds: 1);
-    int counter = 0;
+    counter = 0;
 
     void stopTimer() {
       if (timer != null) {
         timer.cancel();
         timer = null;
-        counter = 0;
+       // counter = 0;
         streamController.close();
       }
     }
+
 
     void tick(_) {
       counter++;
@@ -112,13 +115,22 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                       }
                     }),
-                    myButton(buttonTitle: "RESET", buttonColor: Colors.amberAccent, onButtonClicked: (){
+                    counter == 0 ? Container():
+                    myButton(buttonTitle: !_isStopActive ? "STOP": "RESET",
+                        buttonColor: !_isStopActive ? Colors.red : Colors.amberAccent,
+                        onButtonClicked: (){
+                        setState(() {
+                          _isStopActive = !_isStopActive;
+                        });
                       timerSubscription.cancel();
                       timerStream = null;
-                      setState(() {
-                        minutesStr = '00';
-                        secondsStr = '00';
-                      });
+                      if(!_isStopActive){
+                        setState(() {
+                          minutesStr = '00';
+                          secondsStr = '00';
+                          counter = 0;
+                        });
+                      }
                     }),
                   ],
                 ),
