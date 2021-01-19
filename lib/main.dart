@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     myButton(buttonTitle: "START", buttonColor: Colors.green, onButtonClicked: (){
-                      if(secondsStr == '00'){
+                      if(secondsStr == '00' && minutesStr == '00'){
                         timerStream = stopWatchStream();
                         timerSubscription = timerStream.listen((int newTick) {
                           setState(() {
